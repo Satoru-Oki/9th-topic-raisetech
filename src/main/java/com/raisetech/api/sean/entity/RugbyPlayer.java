@@ -6,14 +6,14 @@ public class RugbyPlayer {
     private String name;
     private int height;
     private int weight;
-    private String posi;
+    private String position;
 
-    public RugbyPlayer(int id, String name, int height, int weight, String posi) {
+    public RugbyPlayer(int id, String name, int height, int weight, String position) {
         this.id = id;
         this.name = name;
         this.height = height;
         this.weight = weight;
-        this.posi = posi;
+        this.position = position;
     }
 
     public int getId() {
@@ -32,7 +32,7 @@ public class RugbyPlayer {
         return weight;
     }
 
-    public String getPosi() {
-        return posi;
+    public String getPosition() {
+        return position;
     }
 }
