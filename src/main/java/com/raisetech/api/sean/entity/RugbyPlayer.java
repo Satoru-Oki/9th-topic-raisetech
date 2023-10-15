@@ -3,17 +3,21 @@ package com.raisetech.api.sean.entity;
 public class RugbyPlayer {
 
     private int id;
-    private String name;
-    private int height;
-    private int weight;
-    private String position;
 
-    public RugbyPlayer(int id, String name, int height, int weight, String position) {
+    private String name;
+
+    private int height;
+
+    private int weight;
+
+    private String posi;
+
+    public RugbyPlayer(int id, String name, int height, int weight, String posi) {
         this.id = id;
         this.name = name;
         this.height = height;
         this.weight = weight;
-        this.position = position;
+        this.posi = posi;
     }
 
     public int getId() {
@@ -32,7 +36,7 @@ public class RugbyPlayer {
         return weight;
     }
 
-    public String getPosition() {
-        return position;
+    public String getPosi() {
+        return posi;
     }
 }
