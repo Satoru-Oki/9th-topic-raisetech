@@ -18,9 +18,7 @@ public interface RugbyPlayerMapper {
             "WHERE 1=1 " +
             "<if test='height != null'>AND height > #{height}</if> " +
             "<if test='weight != null'>AND weight > #{weight}</if> " +
+            "<if test='posi != null'>AND posi = #{posi}</if> " +
             "</script>")
-    List<RugbyPlayer> findByHeightOrWeight(Integer height, Integer weight);
-
-    @Select("SELECT * FROM rugbyPlayers WHERE posi = #{posi}")
-    List<RugbyPlayer> findByPosition(String posi);
+    List<RugbyPlayer> findByReference(Integer height, Integer weight, String posi);
 }
