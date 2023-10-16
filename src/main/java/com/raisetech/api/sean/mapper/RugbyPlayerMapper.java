@@ -18,7 +18,7 @@ public interface RugbyPlayerMapper {
             "WHERE 1=1 " +
             "<if test='height != null'>AND height > #{height}</if> " +
             "<if test='weight != null'>AND weight > #{weight}</if> " +
-            "<if test='posi != null'>AND posi = #{posi}</if> " +
+            "<if test='rugbyPosition != null'>AND rugbyPosition = #{rugbyPosition}</if> " +
             "</script>")
-    List<RugbyPlayer> findByReference(Integer height, Integer weight, String posi);
+    List<RugbyPlayer> findByReference(Integer height, Integer weight, String rugbyPosition);
 }

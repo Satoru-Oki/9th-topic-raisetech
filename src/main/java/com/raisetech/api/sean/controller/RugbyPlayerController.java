@@ -21,17 +21,21 @@ public class RugbyPlayerController {
     public RugbyPlayerController(RugbyPlayerInfoService rugbyPlayerInfoService) {
         this.rugbyPlayerInfoService = rugbyPlayerInfoService;
     }
-    //全件取得およびポジションでのデータ取得はRugbyPlayerを、体重と身長でのデータ取得はPlayerResponseを返す
+
     @GetMapping("/rugbyPlayers")
-    public ResponseEntity<?> getRugbyPlayers(@RequestParam(required = false) Integer height, Integer weight, String posi) {
-        List<RugbyPlayer> players = rugbyPlayerInfoService.findPlayersByReference(height, weight, posi);
+    public ResponseEntity<?> getRugbyPlayers(@RequestParam(required = false) Integer height, Integer weight, String rugbyPosition) {
+        List<RugbyPlayer> players = rugbyPlayerInfoService.findPlayersByReference(height, weight, rugbyPosition);
 
         if (height != null || weight != null) {
             List<PlayerResponse> playerResponses = players.stream()
                     .map(PlayerResponse::new)
                     .collect(Collectors.toList());
             return new ResponseEntity<>(playerResponses, HttpStatus.OK);
+        } else {
+            List<PlayerDataResponse> allPlayerResponses = players.stream()
+                    .map(player -> new PlayerDataResponse(player.getName(), player.getHeight(), player.getWeight(), player.getRugbyPosition()))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(allPlayerResponses, HttpStatus.OK);
         }
-        return new ResponseEntity<>(players, HttpStatus.OK);
     }
 }

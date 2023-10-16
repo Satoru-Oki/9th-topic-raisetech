@@ -10,14 +10,14 @@ public class RugbyPlayer {
 
     private int weight;
 
-    private String posi;
+    private String rugbyPosition;
 
-    public RugbyPlayer(int id, String name, int height, int weight, String posi) {
+    public RugbyPlayer(int id, String name, int height, int weight, String rugbyPosition) {
         this.id = id;
         this.name = name;
         this.height = height;
         this.weight = weight;
-        this.posi = posi;
+        this.rugbyPosition = rugbyPosition;
     }
 
     public int getId() {
@@ -36,7 +36,7 @@ public class RugbyPlayer {
         return weight;
     }
 
-    public String getPosi() {
-        return posi;
+    public String getRugbyPosition() {
+        return rugbyPosition;
     }
 }

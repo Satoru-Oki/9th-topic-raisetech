@@ -5,6 +5,7 @@ import com.raisetech.api.sean.mapper.RugbyPlayerMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RugbyPlayerInfoService {
@@ -15,13 +16,13 @@ public class RugbyPlayerInfoService {
         this.rugbyPlayerMapper = rugbyPlayerMapper;
     }
 
-    public List<RugbyPlayer> findPlayersByReference(Integer height, Integer weight, String posi) {
+    public List<RugbyPlayer> findPlayersByReference(Integer height, Integer weight, String rugbyPosition) {
         List<RugbyPlayer> players;
 
-        if (height == null && weight == null && posi == null) {
+        if (Objects.isNull(height) && Objects.isNull(weight) && Objects.isNull(rugbyPosition)) {
             players = rugbyPlayerMapper.findAll();
         } else {
-            players = rugbyPlayerMapper.findByReference(height, weight, posi);
+            players = rugbyPlayerMapper.findByReference(height, weight, rugbyPosition);
             }
 
             if (players.isEmpty()) {
@@ -30,6 +31,3 @@ public class RugbyPlayerInfoService {
             return players;
         }
     }
-
-
-
