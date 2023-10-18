@@ -5,19 +5,18 @@ import com.raisetech.api.sean.entity.RugbyPlayer;
 public class PlayerResponse {
 
     private String name;
-    private String position;
+    private String rugbyPosition;
 
     public PlayerResponse(RugbyPlayer name) {
         this.name = name.getName();
-        this.position = name.getPosition();
+        this.rugbyPosition = name.getRugbyPosition();
     }
-
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public String getPosition() {
-        return position;
+    public String getRugbyPosition() {
+        return this.rugbyPosition;
     }
 }

@@ -5,11 +5,11 @@ CREATE TABLE rugbyPlayers (
   name VARCHAR(20) NOT NULL,
   height int(5),
   weight int(5),
-  posi VARCHAR(5),
+  rugbyPosition VARCHAR(5),
   PRIMARY KEY(id)
 );
 
-INSERT INTO rugbyPlayers (name, height, weight, posi) VALUES ("稲垣啓太", 186, 116, "PR"),
+INSERT INTO rugbyPlayers (name, height, weight, rugbyPosition) VALUES ("稲垣啓太", 186, 116, "PR"),
                    ("クレイグ・ミラー", 186, 116, "PR"), ("シオネ・ハラシリ", 180, 120, "PR"),
                    ("堀江翔太", 180, 104, "HO"), ("ワーナー・ディアンズ", 202, 117, "LO"),
                    ("ジャック・コーネルセン", 195, 110, "LO"), ("姫野和樹", 187, 108, "No.8"),
