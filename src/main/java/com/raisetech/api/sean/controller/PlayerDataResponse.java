@@ -1,5 +1,7 @@
 package com.raisetech.api.sean.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PlayerDataResponse {
 
     private String name;
@@ -8,6 +10,7 @@ public class PlayerDataResponse {
 
     private int weight;
 
+    @JsonProperty("type")
     private String rugbyPosition;
 
     public PlayerDataResponse(String name, int height, int weight, String rugbyPosition) {

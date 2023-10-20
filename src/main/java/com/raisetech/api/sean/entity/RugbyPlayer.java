@@ -1,26 +1,22 @@
 package com.raisetech.api.sean.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RugbyPlayer {
 
-    private int id;
+    private String id;
 
     private String name;
 
-    private int height;
+    private Integer height;
 
-    private int weight;
+    private Integer weight;
 
+    @JsonProperty("type")
     private String rugbyPosition;
 
-    public RugbyPlayer(int id, String name, int height, int weight, String rugbyPosition) {
-        this.id = id;
-        this.name = name;
-        this.height = height;
-        this.weight = weight;
-        this.rugbyPosition = rugbyPosition;
-    }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -38,5 +34,25 @@ public class RugbyPlayer {
 
     public String getRugbyPosition() {
         return rugbyPosition;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public void setRugbyPosition(String rugbyPosition) {
+        this.rugbyPosition = rugbyPosition;
     }
 }
