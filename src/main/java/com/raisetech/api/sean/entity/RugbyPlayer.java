@@ -24,14 +24,15 @@ public class RugbyPlayer {
         return this.name;
     }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
+    @JsonProperty("type")
     public String getRugbyPosition() {
         return rugbyPosition;
     }
