@@ -15,17 +15,17 @@ public class RugbyPlayerFetchService {
 
     private final RestTemplate restTemplate;
 
-    private final String apiUrl = "https://api.sportradar.us/rugby-union/trial/v3/ja/competitors/sr:competitor:7955/profile.json";
+    private final String API_URL = "https://api.sportradar.us/rugby-union/trial/v3/ja/competitors/sr:competitor:7955/profile.json";
 
     @Value("${rugby.api.key}")
-    private String apiKey;
+    private String API_KEY;
 
     public RugbyPlayerFetchService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     public List<RugbyPlayer> getDataFromExternalApi() {
-        String url = String.format("%s?api_key=%s", apiUrl, apiKey);
+        String url = String.format("%s?api_key=%s", API_URL, API_KEY);
 
         ResponseEntity<TeamInfo> response = restTemplate.exchange(
                 url,
