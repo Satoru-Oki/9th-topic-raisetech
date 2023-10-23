@@ -2,12 +2,18 @@ package com.raisetech.api.sean;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class SeanApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SeanApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SeanApplication.class, args);
+    }
 
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

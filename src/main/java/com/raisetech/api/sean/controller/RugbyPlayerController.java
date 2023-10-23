@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RugbyPlayerController {
 
-
     private final RugbyPlayerInfoService rugbyPlayerInfoService;
 
     public RugbyPlayerController(RugbyPlayerInfoService rugbyPlayerInfoService) {
