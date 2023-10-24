@@ -1,7 +1,9 @@
 package com.raisetech.api.sean.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 public class RugbyPlayer {
 
     private String id;
@@ -15,6 +17,13 @@ public class RugbyPlayer {
     @JsonProperty("type")
     private String rugbyPosition;
 
+    public RugbyPlayer(String id, String name, Integer height, Integer weight, String rugbyPosition) {
+        this.id = id;
+        this.name = name;
+        this.height = height;
+        this.weight = weight;
+        this.rugbyPosition = rugbyPosition;
+    }
 
     public String getId() {
         return this.id;
