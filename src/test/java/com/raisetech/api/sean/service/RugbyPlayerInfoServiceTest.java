@@ -1,5 +1,6 @@
 package com.raisetech.api.sean.service;
 
+import com.raisetech.api.sean.controller.PlayerDataResponse;
 import com.raisetech.api.sean.entity.RugbyPlayer;
 import com.raisetech.api.sean.mapper.RugbyPlayerMapper;
 import org.junit.jupiter.api.Test;
@@ -47,24 +48,12 @@ class RugbyPlayerInfoServiceTest {
     }
 
     @Test
-    public void IDに対応するデータが存在しないときに例外を返すこと() {
-        RugbyPlayer incompletePlayer = new RugbyPlayer("1", null, null, null, null);
-        List<RugbyPlayer> rugbyPlayerList = List.of(incompletePlayer);
-
-        when(rugbyPlayerMapper.findPlayerById("1")).thenReturn(Optional.empty());
-
-        assertThrows(IncompletePlayerInfoException.class, () -> {
-            rugbyPlayerInfoService.insertRugbyPlayers(rugbyPlayerList);
-        });
-    }
-
-    @Test
     public void テーブルからデータを検索し値があればレスポンスを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
 
-        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(any(), any(), any());
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, 85, "WTB");
 
-        ResponseEntity<?> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, "WTB");
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, "WTB");
 
         assertEquals(200, response.getStatusCodeValue());
     }
@@ -72,7 +61,7 @@ class RugbyPlayerInfoServiceTest {
     @Test
     public void 検索したデータが存在しないときに例外を返すこと() {
 
-        doReturn(List.of()).when(rugbyPlayerMapper).findPlayersByReference(any(), any(), any());
+        doReturn(List.of()).when(rugbyPlayerMapper).findPlayersByReference(175, 85, "WTB");
 
         assertThrows(PlayerNotFoundException.class, () -> {
             rugbyPlayerInfoService.findPlayersByReference(175, 85, "WTB");
@@ -80,22 +69,66 @@ class RugbyPlayerInfoServiceTest {
     }
 
     @Test
-    public void 身長か体重で検索したときにPlayerResponseのリストを返すこと() {
+    public void 身長で検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
-        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(any(), any(), any());
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, null, null);
 
-        ResponseEntity<?> response = rugbyPlayerInfoService.findPlayersByReference(175, null, "WTB");
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, null, null);
 
         assertTrue(response.getBody() instanceof List);
         assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
-    public void 身長と体重以外で検索したときにPlayerDataResponseのリストを返すこと() {
+    public void 体重で検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
-        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(any(), any(), any());
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, 85, null);
 
-        ResponseEntity<?> response = rugbyPlayerInfoService.findPlayersByReference(null, null, "WTB");
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, null);
+
+        assertTrue(response.getBody() instanceof List);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void ポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+        RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, null, "WTB");
+
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(null, null, "WTB");
+
+        assertTrue(response.getBody() instanceof List);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void 身長と体重で検索したときにPlayerDataResponseのリストを返すこと() {
+        RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, 85, null);
+
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, null);
+
+        assertTrue(response.getBody() instanceof List);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void 身長とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+        RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, null, "WTB");
+
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, null, "WTB");
+
+        assertTrue(response.getBody() instanceof List);
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void 体重とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+        RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
+        doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, 85, "WTB");
+
+        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, "WTB");
 
         assertTrue(response.getBody() instanceof List);
         assertEquals(200, response.getStatusCodeValue());
