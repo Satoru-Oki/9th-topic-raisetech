@@ -8,12 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,14 +48,19 @@ class RugbyPlayerInfoServiceTest {
     }
 
     @Test
-    public void テーブルからデータを検索し値があればレスポンスを返すこと() {
+    public void 身長と体重とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
 
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, 85, "WTB");
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, "WTB");
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, "WTB");
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 
     @Test
@@ -73,10 +78,14 @@ class RugbyPlayerInfoServiceTest {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, null, null);
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, null, null);
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, null, null);
 
-        assertTrue(response.getBody() instanceof List);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 
     @Test
@@ -84,10 +93,14 @@ class RugbyPlayerInfoServiceTest {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, 85, null);
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, null);
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, null);
 
-        assertTrue(response.getBody() instanceof List);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 
     @Test
@@ -95,10 +108,14 @@ class RugbyPlayerInfoServiceTest {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, null, "WTB");
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(null, null, "WTB");
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(null, null, "WTB");
 
-        assertTrue(response.getBody() instanceof List);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 
     @Test
@@ -106,10 +123,14 @@ class RugbyPlayerInfoServiceTest {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, 85, null);
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, null);
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, null);
 
-        assertTrue(response.getBody() instanceof List);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 
     @Test
@@ -117,10 +138,14 @@ class RugbyPlayerInfoServiceTest {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, null, "WTB");
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(175, null, "WTB");
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, null, "WTB");
 
-        assertTrue(response.getBody() instanceof List);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 
     @Test
@@ -128,9 +153,13 @@ class RugbyPlayerInfoServiceTest {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, 85, "WTB");
 
-        ResponseEntity<List<PlayerDataResponse>> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, "WTB");
+        List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, "WTB");
 
-        assertTrue(response.getBody() instanceof List);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.size());
+        PlayerDataResponse playerDataResponse = response.get(0);
+        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
+        assertEquals(175, playerDataResponse.getHeight());
+        assertEquals(85, playerDataResponse.getWeight());
+        assertEquals("WTB", playerDataResponse.getRugbyPosition());
     }
 }
