@@ -22,7 +22,7 @@ public class RugbyPlayerInfoService {
         for (RugbyPlayer rugbyPlayer : rugbyPlayersList) {
             Optional<RugbyPlayer> existingPlayer = rugbyPlayerMapper.findPlayerById(rugbyPlayer.getId());
 
-            if (!existingPlayer.isPresent()) { // existingPlayerがnullの場合のみデータベースへ登録（重複登録回避）
+            if (existingPlayer.isEmpty()) { // existingPlayerがnullの場合のみデータベースへ登録（重複登録回避）
                 rugbyPlayerMapper.insertPlayerData(rugbyPlayer);
             }
         }

@@ -26,25 +26,38 @@ class RugbyPlayerInfoServiceTest {
     private RugbyPlayerMapper rugbyPlayerMapper;
 
     @Test
-    public void テーブルにデータが存在しないときにデータを登録できること() {
-        RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
-        List<RugbyPlayer> rugbyPlayerList = List.of(rugbyPlayer);
+    public void insertRugbyPlayers_テーブルにデータが存在しないときにデータを登録できること() {
+        RugbyPlayer rugbyPlayer1 = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
+        RugbyPlayer rugbyPlayer2 = new RugbyPlayer("2", "Takeo, Ishizuka", 172, 85, "FL");
+        RugbyPlayer rugbyPlayer3 = new RugbyPlayer("3", "Seiji, Hirao", 177, 80, "SO");
+
+        List<RugbyPlayer> rugbyPlayerList = List.of(rugbyPlayer1, rugbyPlayer2, rugbyPlayer3);
+
         doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("1");
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("2");
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("3");
 
         rugbyPlayerInfoService.insertRugbyPlayers(rugbyPlayerList);
 
-        verify(rugbyPlayerMapper, times(1)).insertPlayerData(rugbyPlayer);
+        verify(rugbyPlayerMapper, times(1)).insertPlayerData(rugbyPlayer1);
+        verify(rugbyPlayerMapper, times(1)).insertPlayerData(rugbyPlayer2);
+        verify(rugbyPlayerMapper, times(1)).insertPlayerData(rugbyPlayer3);
     }
 
     @Test
-    public void テーブルに同じIDが存在するときはデータが登録されないこと() {
+    public void insertRugbyPlayers_複数のデータを登録しようとしたときテーブルにすでに同じIDが存在する場合INSERTがスキップされること() {
         RugbyPlayer existingPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
-        List<RugbyPlayer> rugbyPlayerList = List.of(existingPlayer);
+        RugbyPlayer newPlayer = new RugbyPlayer("2", "Takeo, Ishizuka", 172, 85, "FL");
+
+        List<RugbyPlayer> rugbyPlayerList = List.of(existingPlayer, newPlayer);
+
         doReturn(Optional.of(existingPlayer)).when(rugbyPlayerMapper).findPlayerById("1");
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("2");
 
         rugbyPlayerInfoService.insertRugbyPlayers(rugbyPlayerList);
 
         verify(rugbyPlayerMapper, never()).insertPlayerData(existingPlayer);
+        verify(rugbyPlayerMapper, times(1)).insertPlayerData(newPlayer);
     }
 
     @Test

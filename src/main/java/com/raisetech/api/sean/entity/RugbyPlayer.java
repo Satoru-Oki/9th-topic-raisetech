@@ -20,9 +20,4 @@ public class RugbyPlayer {
 
     @JsonProperty("type")
     private String rugbyPosition;
-
-    @JsonProperty("type")
-    public String getRugbyPosition() {
-        return rugbyPosition;
-    }
 }
