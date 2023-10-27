@@ -61,23 +61,19 @@ class RugbyPlayerInfoServiceTest {
     }
 
     @Test
-    public void 身長と体重とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_身長と体重とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
 
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, 85, "WTB");
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, "WTB");
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 
     @Test
-    public void 検索したデータが存在しないときに例外を返すこと() {
+    public void findPlayersByReference_検索したデータが存在しないときに例外を返すこと() {
 
         doReturn(List.of()).when(rugbyPlayerMapper).findPlayersByReference(175, 85, "WTB");
 
@@ -87,92 +83,68 @@ class RugbyPlayerInfoServiceTest {
     }
 
     @Test
-    public void 身長で検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_身長で検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, null, null);
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, null, null);
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 
     @Test
-    public void 体重で検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_体重で検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, 85, null);
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, null);
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 
     @Test
-    public void ポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_ポジションで検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, null, "WTB");
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(null, null, "WTB");
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 
     @Test
-    public void 身長と体重で検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_身長と体重で検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, 85, null);
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, 85, null);
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 
     @Test
-    public void 身長とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_身長とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(175, null, "WTB");
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(175, null, "WTB");
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 
     @Test
-    public void 体重とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
+    public void findPlayersByReference_体重とポジションで検索したときにPlayerDataResponseのリストを返すこと() {
         RugbyPlayer rugbyPlayer = new RugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(List.of(rugbyPlayer)).when(rugbyPlayerMapper).findPlayersByReference(null, 85, "WTB");
 
         List<PlayerDataResponse> response = rugbyPlayerInfoService.findPlayersByReference(null, 85, "WTB");
 
-        assertEquals(1, response.size());
-        PlayerDataResponse playerDataResponse = response.get(0);
-        assertEquals("Kenki, Fukuoka", playerDataResponse.getName());
-        assertEquals(175, playerDataResponse.getHeight());
-        assertEquals(85, playerDataResponse.getWeight());
-        assertEquals("WTB", playerDataResponse.getRugbyPosition());
+        List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
+        assertEquals(expected, response);
     }
 }
