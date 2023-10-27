@@ -1,6 +1,5 @@
 package com.raisetech.api.sean.controller;
 
-import com.raisetech.api.sean.service.IncompletePlayerInfoException;
 import com.raisetech.api.sean.service.PlayerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +11,6 @@ public class PlayerExceptionHandler {
 
     @ExceptionHandler(PlayerNotFoundException.class)
     public ResponseEntity<String> handlePlayerNotFoundException(PlayerNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler(IncompletePlayerInfoException.class)
-    public ResponseEntity<String> handleIncompletePlayerInfoException(IncompletePlayerInfoException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 

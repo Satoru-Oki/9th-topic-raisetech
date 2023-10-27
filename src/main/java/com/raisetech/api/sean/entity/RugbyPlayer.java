@@ -1,7 +1,13 @@
 package com.raisetech.api.sean.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class RugbyPlayer {
 
     private String id;
@@ -14,46 +20,4 @@ public class RugbyPlayer {
 
     @JsonProperty("type")
     private String rugbyPosition;
-
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    @JsonProperty("type")
-    public String getRugbyPosition() {
-        return rugbyPosition;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public void setRugbyPosition(String rugbyPosition) {
-        this.rugbyPosition = rugbyPosition;
-    }
 }
