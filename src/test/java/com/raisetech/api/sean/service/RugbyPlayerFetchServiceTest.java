@@ -1,4 +1,4 @@
-package com.raisetech.api.sean.service;//package com.raisetech.api.sean.service;
+package com.raisetech.api.sean.service;
 
 import com.raisetech.api.sean.entity.RugbyPlayer;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +41,27 @@ public class RugbyPlayerFetchServiceTest {
         ReflectionTestUtils.setField(rugbyPlayerFetchService, "API_KEY", "MOCK_API_KEY");
         String apiUrl = "https://api.sportradar.us/rugby-union/trial/v3/ja/competitors/sr:competitor:7955/profile.json?api_key=MOCK_API_KEY";
 
-        String responseBody = "{ \"team\": \"brave_blossoms\", \"players\": [ { \"id\": \"1\", \"name\": \"Sinki, Gen\", \"height\": 180, \"weight\": 95, \"type\": \"BR\" }, { \"id\": \"2\", \"name\": \"Kenki, Fukuoka\", \"height\": 170, \"weight\": 75, \"type\": \"WTB\" } ] }";
-
+        String responseBody = """
+                {
+                   "team": "brave_blossoms",
+                   "players": [
+                      {
+                         "id": "1",
+                         "name": "Sinki, Gen",
+                         "height": 180,
+                         "weight": 95,
+                         "type": "BR"
+                      },
+                      {
+                         "id": "2",
+                         "name": "Kenki, Fukuoka",
+                         "height": 170,
+                         "weight": 75,
+                         "type": "WTB"
+                      }
+                   ]
+                }
+                """;
         mockServer.expect(requestTo(apiUrl))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(responseBody, MediaType.APPLICATION_JSON));
