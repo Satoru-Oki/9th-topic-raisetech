@@ -21,4 +21,7 @@ public interface RugbyPlayerMapper {
 
     @SelectProvider(type = RugbyPlayerSqlProvider.class, method = "referencePlayers")
     List<RugbyPlayer> findPlayersByReference(Integer height, Integer weight, String rugbyPosition);
+
+    @Insert("INSERT INTO rugbyPlayers (id, name, height, weight, rugbyPosition) VALUES (#{id}, #{name}, #{height}, #{weight}, #{rugbyPosition})")
+    void createRugbyPlayer(RugbyPlayer rugbyPlayer);
 }

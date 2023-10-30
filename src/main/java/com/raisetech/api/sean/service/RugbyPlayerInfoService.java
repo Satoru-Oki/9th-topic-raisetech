@@ -2,11 +2,13 @@ package com.raisetech.api.sean.service;
 
 import com.raisetech.api.sean.controller.PlayerDataResponse;
 import com.raisetech.api.sean.entity.RugbyPlayer;
+import com.raisetech.api.sean.form.PlayerCreateForm;
 import com.raisetech.api.sean.mapper.RugbyPlayerMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +40,14 @@ public class RugbyPlayerInfoService {
                     .map(player -> new PlayerDataResponse(player.getName(), player.getHeight(), player.getWeight(), player.getRugbyPosition()))
                     .collect(Collectors.toList());
         }
+    }
+
+    public RugbyPlayer createRugbyPlayer(PlayerCreateForm playerCreateForm) {
+        RugbyPlayer rugbyPlayer = new RugbyPlayer(playerCreateForm.getName(), playerCreateForm.getHeight(), playerCreateForm.getWeight(), playerCreateForm.getRugbyPosition());
+        String shortId = UUID.randomUUID().toString().substring(0, 8);
+        rugbyPlayer.setId(shortId);
+        rugbyPlayerMapper.createRugbyPlayer(rugbyPlayer);
+        return rugbyPlayer;
     }
 }
 
