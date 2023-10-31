@@ -1,7 +1,8 @@
 package com.raisetech.api.sean.controller;
 
 import com.raisetech.api.sean.entity.RugbyPlayer;
-import com.raisetech.api.sean.form.PlayerForm;
+import com.raisetech.api.sean.form.PlayerCreateForm;
+import com.raisetech.api.sean.form.PlayerUpdateForm;
 import com.raisetech.api.sean.service.RugbyPlayerInfoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +31,14 @@ public class RugbyPlayerController {
     }
 
     @PostMapping("/rugbyPlayers")
-    public ResponseEntity<Map<String, String>> createRugbyPlayer(@RequestBody @Validated PlayerForm playerCreateForm, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Map<String, String>> createRugbyPlayer(@RequestBody @Validated PlayerCreateForm playerCreateForm, UriComponentsBuilder uriBuilder) {
         RugbyPlayer rugbyPlayer = rugbyPlayerInfoService.createRugbyPlayer(playerCreateForm);
         URI location = uriBuilder.path("/rugbyPlayer/{id}").buildAndExpand(rugbyPlayer.getId()).toUri();
         return ResponseEntity.created(location).body(Map.of("message", "選手が登録されました"));
     }
 
     @PatchMapping("/rugbyPlayers/{id}")
-    public ResponseEntity<Map<String, String>> updateRugbyPlayer(@PathVariable("id") String id, @RequestBody @Validated PlayerForm playerUpdateForm) {
+    public ResponseEntity<Map<String, String>> updateRugbyPlayer(@PathVariable("id") String id, @RequestBody @Validated PlayerUpdateForm playerUpdateForm) {
         rugbyPlayerInfoService.updateRugbyPlayer(id, playerUpdateForm.getName(), playerUpdateForm.getHeight(), playerUpdateForm.getWeight(), playerUpdateForm.getRugbyPosition());
         return ResponseEntity.ok(Map.of("message", "選手データが更新されました"));
     }

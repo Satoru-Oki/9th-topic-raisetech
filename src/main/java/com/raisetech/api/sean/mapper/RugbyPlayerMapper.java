@@ -22,8 +22,12 @@ public interface RugbyPlayerMapper {
     @Insert("INSERT INTO rugbyPlayers (id, name, height, weight, rugbyPosition) VALUES (#{id}, #{name}, #{height}, #{weight}, #{rugbyPosition})")
     void createRugbyPlayer(RugbyPlayer rugbyPlayer);
 
-    @Update("UPDATE rugbyPlayers SET name = #{name}, height = #{height}, weight = #{weight}, rugbyPosition = #{rugbyPosition} WHERE id = #{id}")
-    void updateRugbyPlayer(String id, String name, Integer height, Integer weight, String rugbyPosition);
+    @UpdateProvider(type = RugbyPlayerSqlProvider.class, method = "updateRugbyPlayer")
+    void updateRugbyPlayer(@Param("id") String id,
+                           @Param("name") String name,
+                           @Param("height") Integer height,
+                           @Param("weight") Integer weight,
+                           @Param("rugbyPosition") String rugbyPosition);
 
     @Delete("DELETE FROM rugbyPlayers WHERE id = #{id}")
     void deleteRugbyPlayer(String id);

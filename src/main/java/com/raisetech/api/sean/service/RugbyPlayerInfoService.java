@@ -2,7 +2,7 @@ package com.raisetech.api.sean.service;
 
 import com.raisetech.api.sean.controller.PlayerDataResponse;
 import com.raisetech.api.sean.entity.RugbyPlayer;
-import com.raisetech.api.sean.form.PlayerForm;
+import com.raisetech.api.sean.form.PlayerCreateForm;
 import com.raisetech.api.sean.mapper.RugbyPlayerMapper;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class RugbyPlayerInfoService {
         }
     }
 
-    public RugbyPlayer createRugbyPlayer(PlayerForm playerCreateForm) {
+    public RugbyPlayer createRugbyPlayer(PlayerCreateForm playerCreateForm) {
         RugbyPlayer rugbyPlayer = new RugbyPlayer(playerCreateForm.getName(), playerCreateForm.getHeight(), playerCreateForm.getWeight(), playerCreateForm.getRugbyPosition());
         String shortId = UUID.randomUUID().toString().substring(0, 8);
         rugbyPlayer.setId(shortId);
@@ -52,6 +52,13 @@ public class RugbyPlayerInfoService {
 
     public void updateRugbyPlayer(String id, String name, Integer height, Integer weight, String rugbyPosition) {
         rugbyPlayerMapper.findPlayerById(id).orElseThrow(() -> new PlayerNotFoundException("当該IDを持つ選手は存在しません"));
+        if (name != null && name.trim().isEmpty()) {
+            throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
+        }
+
+        if (rugbyPosition != null && rugbyPosition.trim().isEmpty()) {
+            throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
+        }
         rugbyPlayerMapper.updateRugbyPlayer(id, name, height, weight, rugbyPosition);
     }
 

@@ -1,5 +1,6 @@
 package com.raisetech.api.sean.controller;
 
+import com.raisetech.api.sean.service.PlayerIllegalArgumentException;
 import com.raisetech.api.sean.service.PlayerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +34,12 @@ public class PlayerExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", errors));
+    }
+
+    @ExceptionHandler(PlayerIllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handlePlayerIllegalArgumentException(PlayerIllegalArgumentException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", e.getMessage()));
     }
 }
