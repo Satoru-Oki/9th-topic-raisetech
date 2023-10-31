@@ -7,17 +7,31 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
 public class PlayerExceptionHandler {
 
+
     @ExceptionHandler(PlayerNotFoundException.class)
-    public ResponseEntity<String> handlePlayerNotFoundException(PlayerNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity<Map<String, String>> handlePlayerNotFoundException(PlayerNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        return ResponseEntity.badRequest().body(errorMessage);
+    public ResponseEntity<Map<String, List<String>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(objectError -> objectError.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", errors));
     }
 }

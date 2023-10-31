@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class PlayerCreateForm {
+public class PlayerForm {
 
     @NotBlank
     private String name;

@@ -1,10 +1,7 @@
 package com.raisetech.api.sean.mapper;
 
 import com.raisetech.api.sean.entity.RugbyPlayer;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,4 +21,10 @@ public interface RugbyPlayerMapper {
 
     @Insert("INSERT INTO rugbyPlayers (id, name, height, weight, rugbyPosition) VALUES (#{id}, #{name}, #{height}, #{weight}, #{rugbyPosition})")
     void createRugbyPlayer(RugbyPlayer rugbyPlayer);
+
+    @Update("UPDATE rugbyPlayers SET name = #{name}, height = #{height}, weight = #{weight}, rugbyPosition = #{rugbyPosition} WHERE id = #{id}")
+    void updateRugbyPlayer(String id, String name, Integer height, Integer weight, String rugbyPosition);
+
+    @Delete("DELETE FROM rugbyPlayers WHERE id = #{id}")
+    void deleteRugbyPlayer(String id);
 }
