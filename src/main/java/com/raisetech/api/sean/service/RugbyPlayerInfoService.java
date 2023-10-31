@@ -49,5 +49,22 @@ public class RugbyPlayerInfoService {
         rugbyPlayerMapper.createRugbyPlayer(rugbyPlayer);
         return rugbyPlayer;
     }
+
+    public void updateRugbyPlayer(String id, String name, Integer height, Integer weight, String rugbyPosition) {
+        rugbyPlayerMapper.findPlayerById(id).orElseThrow(() -> new PlayerNotFoundException("当該IDを持つ選手は存在しません"));
+        if (name != null && name.trim().isEmpty()) {
+            throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
+        }
+
+        if (rugbyPosition != null && rugbyPosition.trim().isEmpty()) {
+            throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
+        }
+        rugbyPlayerMapper.updateRugbyPlayer(id, name, height, weight, rugbyPosition);
+    }
+
+    public void deleteRugbyPlayer(String id) {
+        rugbyPlayerMapper.findPlayerById(id).orElseThrow(() -> new PlayerNotFoundException("当該IDを持つ選手は存在しません"));
+        rugbyPlayerMapper.deleteRugbyPlayer(id);
+    }
 }
 
