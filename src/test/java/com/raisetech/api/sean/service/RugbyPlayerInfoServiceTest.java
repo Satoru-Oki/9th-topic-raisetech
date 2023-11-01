@@ -176,7 +176,7 @@ class RugbyPlayerInfoServiceTest {
 
     @ParameterizedTest
     @MethodSource("updateRugbyPlayerParameters")
-    public void updateRugbyPlayer_IDがある場合に選手のすべての属性の組み合わせで更新ができること(String playerId, String name, Integer height, Integer weight, String rugbyPosition) throws Exception {
+    public void updateRugbyPlayer_IDがある場合に他の属性がnullであっても正常に更新ができること(String playerId, String name, Integer height, Integer weight, String rugbyPosition) throws Exception {
         RugbyPlayer updatePlayer = new RugbyPlayer(playerId, "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(Optional.of(updatePlayer)).when(rugbyPlayerMapper).findPlayerById(playerId);
 
@@ -199,14 +199,14 @@ class RugbyPlayerInfoServiceTest {
 
     @Test
     public void updateRugbyPlayer_指定したIDが存在しないとき例外を返すこと() {
-        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("1");
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("999");
 
-        assertThatThrownBy(() -> rugbyPlayerInfoService.updateRugbyPlayer("1", "Kenki, Fukuoka", 175, 85, "WTB"))
+        assertThatThrownBy(() -> rugbyPlayerInfoService.updateRugbyPlayer("999", "Kenki, Fukuoka", 175, 85, "WTB"))
                 .isInstanceOfSatisfying(PlayerNotFoundException.class, e -> {
                     assertThat(e.getMessage()).isEqualTo("当該IDを持つ選手は存在しません");
                 });
 
-        verify(rugbyPlayerMapper, times(1)).findPlayerById("1");
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("999");
     }
 
     @Test
@@ -246,14 +246,14 @@ class RugbyPlayerInfoServiceTest {
 
     @Test
     public void deleteRugbyPlayer_指定したIDが存在しないときに例外を返すこと() {
-        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("1");
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("999");
 
-        assertThatThrownBy(() -> rugbyPlayerInfoService.deleteRugbyPlayer("1"))
+        assertThatThrownBy(() -> rugbyPlayerInfoService.deleteRugbyPlayer("999"))
                 .isInstanceOfSatisfying(PlayerNotFoundException.class, e -> {
                     assertThat(e.getMessage()).isEqualTo("当該IDを持つ選手は存在しません");
                 });
 
-        verify(rugbyPlayerMapper, times(1)).findPlayerById("1");
-        verify(rugbyPlayerMapper, never()).deleteRugbyPlayer("1");
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("999");
+        verify(rugbyPlayerMapper, never()).deleteRugbyPlayer("999");
     }
 }
