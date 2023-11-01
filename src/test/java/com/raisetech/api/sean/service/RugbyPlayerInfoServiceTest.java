@@ -2,19 +2,32 @@ package com.raisetech.api.sean.service;
 
 import com.raisetech.api.sean.controller.PlayerDataResponse;
 import com.raisetech.api.sean.entity.RugbyPlayer;
+import com.raisetech.api.sean.form.PlayerCreateForm;
 import com.raisetech.api.sean.mapper.RugbyPlayerMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class RugbyPlayerInfoServiceTest {
@@ -146,5 +159,101 @@ class RugbyPlayerInfoServiceTest {
 
         List<PlayerDataResponse> expected = List.of(new PlayerDataResponse("Kenki, Fukuoka", 175, 85, "WTB"));
         assertEquals(expected, response);
+    }
+
+    @Test
+    public void createRugbyPlayer_RugbyCreateFormで取得した選手を登録できること() {
+        PlayerCreateForm createForm = new PlayerCreateForm("Kenki, Fukuoka", 175, 85, "WTB");
+        RugbyPlayer expectedRugbyPlayer = new RugbyPlayer("Kenki, Fukuoka", 175, 85, "WTB");
+        expectedRugbyPlayer.setId(UUID.randomUUID().toString().substring(0, 8));
+        lenient().doNothing().when(rugbyPlayerMapper).createRugbyPlayer(expectedRugbyPlayer);
+        RugbyPlayer actual = rugbyPlayerInfoService.createRugbyPlayer(createForm);
+        assertEquals(expectedRugbyPlayer.getName(), actual.getName());
+        assertEquals(expectedRugbyPlayer.getHeight(), actual.getHeight());
+        assertEquals(expectedRugbyPlayer.getWeight(), actual.getWeight());
+        assertEquals(expectedRugbyPlayer.getRugbyPosition(), actual.getRugbyPosition());
+    }
+
+    @ParameterizedTest
+    @MethodSource("updateRugbyPlayerParameters")
+    public void updateRugbyPlayer_IDがある場合に他の属性がnullであっても正常に更新ができること(String playerId, String name, Integer height, Integer weight, String rugbyPosition) throws Exception {
+        RugbyPlayer updatePlayer = new RugbyPlayer(playerId, "Kenki, Fukuoka", 175, 85, "WTB");
+        doReturn(Optional.of(updatePlayer)).when(rugbyPlayerMapper).findPlayerById(playerId);
+
+        rugbyPlayerInfoService.updateRugbyPlayer(playerId, name, height, weight, rugbyPosition);
+        verify(rugbyPlayerMapper, times(1)).updateRugbyPlayer(playerId, name, height, weight, rugbyPosition);
+    }
+
+    private static Stream<Arguments> updateRugbyPlayerParameters() {
+        String[] names = {null, "Takeo, Ishizuka"};
+        Integer[] heights = {null, 171};
+        Integer[] weights = {null, 80};
+        String[] rugbyPositions = {null, "FL"};
+
+        return Arrays.stream(names)
+                .flatMap(name -> Arrays.stream(heights).flatMap(height ->
+                        Arrays.stream(weights).flatMap(weight ->
+                                Arrays.stream(rugbyPositions).map(rugbyPosition ->
+                                        Arguments.of("1", name, height, weight, rugbyPosition)))));
+    }
+
+    @Test
+    public void updateRugbyPlayer_指定したIDが存在しないとき例外を返すこと() {
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("999");
+
+        assertThatThrownBy(() -> rugbyPlayerInfoService.updateRugbyPlayer("999", "Kenki, Fukuoka", 175, 85, "WTB"))
+                .isInstanceOfSatisfying(PlayerNotFoundException.class, e -> {
+                    assertThat(e.getMessage()).isEqualTo("当該IDを持つ選手は存在しません");
+                });
+
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("999");
+    }
+
+    @Test
+    public void updateRugbyPlayer_名前が空白のときに例外を返すこと() {
+
+        doReturn(Optional.of(new RugbyPlayer())).when(rugbyPlayerMapper).findPlayerById("1");
+
+        assertThatThrownBy(() -> rugbyPlayerInfoService.updateRugbyPlayer("1", " ", 175, 85, "WTB"))
+                .isInstanceOfSatisfying(PlayerIllegalArgumentException.class, e -> {
+                    assertThat(e.getMessage()).isEqualTo("空白の入力は許可されていません");
+                });
+
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("1");
+    }
+
+    @Test
+    public void updateRugbyPlayer_ポジションが空白だったときに例外を返すこと() {
+        doReturn(Optional.of(new RugbyPlayer())).when(rugbyPlayerMapper).findPlayerById("1");
+
+        assertThatThrownBy(() -> rugbyPlayerInfoService.updateRugbyPlayer("1", "Kenki, Fukuoka", 175, 85, " "))
+                .isInstanceOfSatisfying(PlayerIllegalArgumentException.class, e -> {
+                    assertThat(e.getMessage()).isEqualTo("空白の入力は許可されていません");
+                });
+
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("1");
+    }
+
+    @Test
+    public void deleteRugbyPlayer_IDがある場合に選手を削除できること() {
+        doReturn(Optional.of(new RugbyPlayer())).when(rugbyPlayerMapper).findPlayerById("1");
+
+        rugbyPlayerInfoService.deleteRugbyPlayer("1");
+
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("1");
+        verify(rugbyPlayerMapper, times(1)).deleteRugbyPlayer("1");
+    }
+
+    @Test
+    public void deleteRugbyPlayer_指定したIDが存在しないときに例外を返すこと() {
+        doReturn(Optional.empty()).when(rugbyPlayerMapper).findPlayerById("999");
+
+        assertThatThrownBy(() -> rugbyPlayerInfoService.deleteRugbyPlayer("999"))
+                .isInstanceOfSatisfying(PlayerNotFoundException.class, e -> {
+                    assertThat(e.getMessage()).isEqualTo("当該IDを持つ選手は存在しません");
+                });
+
+        verify(rugbyPlayerMapper, times(1)).findPlayerById("999");
+        verify(rugbyPlayerMapper, never()).deleteRugbyPlayer("999");
     }
 }
