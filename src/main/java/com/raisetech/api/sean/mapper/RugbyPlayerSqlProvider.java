@@ -13,13 +13,13 @@ public class RugbyPlayerSqlProvider {
             SELECT("*");
             FROM("rugby_players");
             if (params.get("height") != null) {
-                WHERE("height > #{height}");
+                WHERE("height >= #{height}");
             }
             if (params.get("weight") != null) {
-                WHERE("weight > #{weight}");
+                WHERE("weight >= #{weight}");
             }
-            if (params.get("rugbyPosition") != null) {
-                WHERE("rugbyPosition = #{rugbyPosition}");
+            if (params.get("rugby_position") != null) {
+                WHERE("rugby_position = #{rugby_position}");
             }
         }}.toString();
     }
@@ -38,8 +38,8 @@ public class RugbyPlayerSqlProvider {
         if (params.get("weight") != null) {
             updates.add("weight = #{weight}");
         }
-        if (params.get("rugbyPosition") != null) {
-            updates.add("rugbyPosition = #{rugbyPosition}");
+        if (params.get("rugby_position") != null) {
+            updates.add("rugby_position = #{rugby_position}");
         }
 
         sql.append(String.join(", ", updates));

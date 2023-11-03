@@ -17,5 +17,5 @@ public class PlayerDataResponse {
     private int weight;
 
     @JsonProperty("type")
-    private String rugbyPosition;
+    private String rugby_position;
 }

@@ -19,5 +19,5 @@ public class PlayerUpdateForm {
     @Max(value = 300, message = "体重は10から300の間で登録してください")
     private Integer weight;
 
-    private String rugbyPosition;
+    private String rugby_position;
 }

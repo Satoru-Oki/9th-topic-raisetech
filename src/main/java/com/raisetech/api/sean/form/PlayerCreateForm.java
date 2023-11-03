@@ -25,5 +25,5 @@ public class PlayerCreateForm {
     private Integer weight;
 
     @NotBlank
-    private String rugbyPosition;
+    private String rugby_position;
 }

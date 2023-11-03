@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -47,30 +48,56 @@ class RugbyPlayerMapperTest {
     @MethodSource("provideParameters")
     @DataSet("datasets/rugbyPlayers.yml")
     @Transactional
-    void findPlayersByReference_nullを含んだすべての属性の組み合わせで検索ができること(Integer height, Integer weight, String rugbyPosition) {
-        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugbyPosition);
+    void findPlayersByReference_nullを含んだ身長体重ポジションの組み合わせで検索ができること(Integer height, Integer weight, String rugby_position) {
+        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugby_position);
 
         if (height != null) {
-            players.forEach(player -> assertTrue(player.getHeight() > height));
+            players.forEach(player -> assertTrue(player.getHeight() >= height));
         }
         if (weight != null) {
-            players.forEach(player -> assertTrue(player.getWeight() > weight));
+            players.forEach(player -> assertTrue(player.getWeight() >= weight));
         }
-        if (rugbyPosition != null) {
-            players.forEach(player -> assertEquals(rugbyPosition, player.getRugbyPosition()));
+        if (rugby_position != null) {
+            players.forEach(player -> assertEquals(rugby_position, player.getRugby_position()));
         }
     }
 
     static Stream<Arguments> provideParameters() {
         Integer[] heights = {null, 177};
         Integer[] weights = {null, 83};
-        String[] rugbyPositions = {null, "WTB"};
+        String[] rugby_positions = {null, "WTB"};
 
         return Arrays.stream(heights)
                 .flatMap(height -> Arrays.stream(weights)
-                        .flatMap(weight -> Arrays.stream(rugbyPositions)
-                                .map(rugbyPosition -> Arguments.of(height, weight, rugbyPosition))
+                        .flatMap(weight -> Arrays.stream(rugby_positions)
+                                .map(rugby_position -> Arguments.of(height, weight, rugby_position))
                         )
                 );
+    }
+
+    @ParameterizedTest
+    @MethodSource("playerSearchCriteria")
+    @DataSet("datasets/rugbyPlayers.yml")
+    @Transactional
+    void findPlayersByReference_nullを含んだ身長体重ポジションの組み合わせで検索ができること(Integer height, Integer
+            weight, String rugby_position, List<RugbyPlayer> expectedPlayers) {
+
+        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugby_position);
+
+        assertEquals(expectedPlayers, players);
+    }
+
+    static Stream<Arguments> playerSearchCriteria() {
+        return Stream.of(
+                Arguments.of(null, null, null, List.of(new RugbyPlayer("1", "Kenki, Fukuoka", 175, 81, "WTB"), new RugbyPlayer("2", "Seiji, Hirao", 178, 78, "SO"),
+                        new RugbyPlayer("3", "Gunter, Ben", 192, 115, "FL"))),
+                Arguments.of(177, 100, "WTB", Collections.emptyList()),
+                Arguments.of(176, null, null, List.of(new RugbyPlayer("2", "Seiji, Hirao", 178, 78, "SO"), new RugbyPlayer("3", "Gunter, Ben", 192, 115, "FL"))),
+                Arguments.of(null, 100, null, List.of(new RugbyPlayer("3", "Gunter, Ben", 192, 115, "FL"))),
+                Arguments.of(null, null, "WTB", List.of(new RugbyPlayer("1", "Kenki, Fukuoka", 175, 81, "WTB"))),
+                Arguments.of(178, 78, null, List.of(new RugbyPlayer("2", "Seiji, Hirao", 178, 78, "SO"), new RugbyPlayer("3", "Gunter, Ben", 192, 115, "FL"))),
+                Arguments.of(192, null, "FL", List.of(new RugbyPlayer("3", "Gunter, Ben", 192, 115, "FL"))),
+                Arguments.of(null, 81, "WTB", List.of(new RugbyPlayer("1", "Kenki, Fukuoka", 175, 81, "WTB")))
+        );
     }
 }
