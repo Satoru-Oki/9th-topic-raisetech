@@ -42,11 +42,11 @@ public class RugbyPlayerInfoService {
         }
     }
 
-    public RugbyPlayer createRugbyPlayer(PlayerCreateForm playerCreateForm) {
+    public RugbyPlayer insertRugbyPlayers(PlayerCreateForm playerCreateForm) {
         RugbyPlayer rugbyPlayer = new RugbyPlayer(playerCreateForm.getName(), playerCreateForm.getHeight(), playerCreateForm.getWeight(), playerCreateForm.getRugbyPosition());
         String shortId = UUID.randomUUID().toString().substring(0, 8);
         rugbyPlayer.setId(shortId);
-        rugbyPlayerMapper.createRugbyPlayer(rugbyPlayer);
+        rugbyPlayerMapper.insertPlayerData(rugbyPlayer);
         return rugbyPlayer;
     }
 
@@ -59,6 +59,11 @@ public class RugbyPlayerInfoService {
         if (rugbyPosition != null && rugbyPosition.trim().isEmpty()) {
             throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
         }
+
+        if (name == null && height == null && weight == null && rugbyPosition == null) {
+            throw new PlayerIllegalArgumentException("更新するための情報が不足しています");
+        }
+        
         rugbyPlayerMapper.updateRugbyPlayer(id, name, height, weight, rugbyPosition);
     }
 

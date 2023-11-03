@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS rugbyPlayers;
+DROP TABLE IF EXISTS rugby_players;
 
-CREATE TABLE rugbyPlayers (
+CREATE TABLE rugby_players (
   id VARCHAR(30) NOT NULL,
   name VARCHAR(50) NOT NULL,
   height int(5),
