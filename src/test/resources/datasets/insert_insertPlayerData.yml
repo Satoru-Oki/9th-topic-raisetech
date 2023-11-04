@@ -1,0 +1,6 @@
+rugby_players:
+  - id: "1"
+    name: "Kenki, Fukuoka"
+    height: 175
+    weight: 81
+    rugby_position: "WTB"

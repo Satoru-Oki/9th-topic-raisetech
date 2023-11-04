@@ -11,28 +11,36 @@ public class RugbyPlayerSqlProvider {
     public String referencePlayers(Map<String, Object> params) {
         return new SQL() {{
             SELECT("*");
-            FROM("rugbyPlayers");
+            FROM("rugby_players");
             if (params.get("height") != null) {
-                WHERE("height > #{height}");
+                WHERE("height >= #{height}");
             }
             if (params.get("weight") != null) {
-                WHERE("weight > #{weight}");
+                WHERE("weight >= #{weight}");
             }
             if (params.get("rugbyPosition") != null) {
-                WHERE("rugbyPosition = #{rugbyPosition}");
+                WHERE("rugby_position = #{rugbyPosition}");
             }
         }}.toString();
     }
 
     public String updateRugbyPlayer(Map<String, Object> params) {
         StringBuilder sql = new StringBuilder();
-        sql.append("UPDATE rugbyPlayers SET ");
+        sql.append("UPDATE rugby_players SET ");
 
         List<String> updates = new ArrayList<>();
-        if (params.get("name") != null) updates.add("name = #{name}");
-        if (params.get("height") != null) updates.add("height = #{height}");
-        if (params.get("weight") != null) updates.add("weight = #{weight}");
-        if (params.get("rugbyPosition") != null) updates.add("rugbyPosition = #{rugbyPosition}");
+        if (params.get("name") != null) {
+            updates.add("name = #{name}");
+        }
+        if (params.get("height") != null) {
+            updates.add("height = #{height}");
+        }
+        if (params.get("weight") != null) {
+            updates.add("weight = #{weight}");
+        }
+        if (params.get("rugbyPosition") != null) {
+            updates.add("rugby_position = #{rugbyPosition}");
+        }
 
         sql.append(String.join(", ", updates));
         sql.append(" WHERE id = #{id}");

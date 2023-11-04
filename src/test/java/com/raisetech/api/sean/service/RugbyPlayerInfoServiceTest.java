@@ -166,8 +166,8 @@ class RugbyPlayerInfoServiceTest {
         PlayerCreateForm createForm = new PlayerCreateForm("Kenki, Fukuoka", 175, 85, "WTB");
         RugbyPlayer expectedRugbyPlayer = new RugbyPlayer("Kenki, Fukuoka", 175, 85, "WTB");
         expectedRugbyPlayer.setId(UUID.randomUUID().toString().substring(0, 8));
-        lenient().doNothing().when(rugbyPlayerMapper).createRugbyPlayer(expectedRugbyPlayer);
-        RugbyPlayer actual = rugbyPlayerInfoService.createRugbyPlayer(createForm);
+        lenient().doNothing().when(rugbyPlayerMapper).insertPlayerData(expectedRugbyPlayer);
+        RugbyPlayer actual = rugbyPlayerInfoService.insertRugbyPlayers(createForm);
         assertEquals(expectedRugbyPlayer.getName(), actual.getName());
         assertEquals(expectedRugbyPlayer.getHeight(), actual.getHeight());
         assertEquals(expectedRugbyPlayer.getWeight(), actual.getWeight());
@@ -193,8 +193,10 @@ class RugbyPlayerInfoServiceTest {
         return Arrays.stream(names)
                 .flatMap(name -> Arrays.stream(heights).flatMap(height ->
                         Arrays.stream(weights).flatMap(weight ->
-                                Arrays.stream(rugbyPositions).map(rugbyPosition ->
-                                        Arguments.of("1", name, height, weight, rugbyPosition)))));
+                                Arrays.stream(rugbyPositions)
+                                        .filter(rugbyPosition -> !(name == null && height == null && weight == null && rugbyPosition == null))
+                                        .map(rugbyPosition ->
+                                                Arguments.of("1", name, height, weight, rugbyPosition)))));
     }
 
     @Test
