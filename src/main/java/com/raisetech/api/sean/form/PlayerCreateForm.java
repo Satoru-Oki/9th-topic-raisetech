@@ -1,5 +1,6 @@
 package com.raisetech.api.sean.form;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -25,5 +26,6 @@ public class PlayerCreateForm {
     private Integer weight;
 
     @NotBlank
-    private String rugby_position;
+    @JsonProperty("rugby_position")
+    private String rugbyPosition;
 }

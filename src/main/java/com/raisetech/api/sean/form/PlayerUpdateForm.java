@@ -1,5 +1,6 @@
 package com.raisetech.api.sean.form;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class PlayerUpdateForm {
     @Max(value = 300, message = "体重は10から300の間で登録してください")
     private Integer weight;
 
-    private String rugby_position;
+    @JsonProperty("rugby_position")
+    private String rugbyPosition;
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
 @Mapper
 public interface RugbyPlayerMapper {
 
-    @Insert("INSERT INTO rugby_players (id, name, height, weight, rugby_position) VALUES (#{id}, #{name}, #{height}, #{weight}, #{rugby_position})")
+    @Insert("INSERT INTO rugby_players (id, name, height, weight, rugby_position) VALUES (#{id}, #{name}, #{height}, #{weight}, #{rugbyPosition})")
     void insertPlayerData(RugbyPlayer playerData);
 
     //データを重複させずにデータベースに登録する処理(insertRugbyPlayers)で使用
@@ -23,14 +23,14 @@ public interface RugbyPlayerMapper {
     Optional<RugbyPlayer> findPlayerById(String id);
 
     @SelectProvider(type = RugbyPlayerSqlProvider.class, method = "referencePlayers")
-    List<RugbyPlayer> findPlayersByReference(Integer height, Integer weight, String rugby_position);
+    List<RugbyPlayer> findPlayersByReference(Integer height, Integer weight, String rugbyPosition);
 
     @UpdateProvider(type = RugbyPlayerSqlProvider.class, method = "updateRugbyPlayer")
     void updateRugbyPlayer(@Param("id") String id,
                            @Param("name") String name,
                            @Param("height") Integer height,
                            @Param("weight") Integer weight,
-                           @Param("rugby_position") String rugby_position);
+                           @Param("rugbyPosition") String rugbyPosition);
 
     @Delete("DELETE FROM rugby_players WHERE id = #{id}")
     void deleteRugbyPlayer(String id);

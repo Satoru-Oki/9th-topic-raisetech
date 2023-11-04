@@ -32,8 +32,8 @@ public class RugbyPlayerController {
     }
 
     @GetMapping("/rugbyPlayers")
-    public ResponseEntity<List<PlayerDataResponse>> getRugbyPlayers(@RequestParam(required = false) Integer height, Integer weight, String rugby_position) {
-        List<PlayerDataResponse> players = rugbyPlayerInfoService.findPlayersByReference(height, weight, rugby_position);
+    public ResponseEntity<List<PlayerDataResponse>> getRugbyPlayers(@RequestParam(required = false) Integer height, Integer weight, String rugbyPosition) {
+        List<PlayerDataResponse> players = rugbyPlayerInfoService.findPlayersByReference(height, weight, rugbyPosition);
         return new ResponseEntity<>(players, HttpStatus.OK);
     }
 
@@ -46,7 +46,7 @@ public class RugbyPlayerController {
 
     @PatchMapping("/rugbyPlayers/{id}")
     public ResponseEntity<Map<String, String>> updateRugbyPlayer(@PathVariable("id") String id, @RequestBody @Validated PlayerUpdateForm playerUpdateForm) {
-        rugbyPlayerInfoService.updateRugbyPlayer(id, playerUpdateForm.getName(), playerUpdateForm.getHeight(), playerUpdateForm.getWeight(), playerUpdateForm.getRugby_position());
+        rugbyPlayerInfoService.updateRugbyPlayer(id, playerUpdateForm.getName(), playerUpdateForm.getHeight(), playerUpdateForm.getWeight(), playerUpdateForm.getRugbyPosition());
         return ResponseEntity.ok(Map.of("message", "選手データが更新されました"));
     }
 

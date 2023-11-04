@@ -30,41 +30,41 @@ public class RugbyPlayerInfoService {
         }
     }
 
-    public List<PlayerDataResponse> findPlayersByReference(Integer height, Integer weight, String rugby_position) {
-        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugby_position);
+    public List<PlayerDataResponse> findPlayersByReference(Integer height, Integer weight, String rugbyPosition) {
+        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugbyPosition);
 
         if (players.isEmpty()) {
             throw new PlayerNotFoundException("条件に該当する選手は存在しないか、条件の指定が誤っています");
         } else {
             return players.stream()
-                    .map(player -> new PlayerDataResponse(player.getName(), player.getHeight(), player.getWeight(), player.getRugby_position()))
+                    .map(player -> new PlayerDataResponse(player.getName(), player.getHeight(), player.getWeight(), player.getRugbyPosition()))
                     .collect(Collectors.toList());
         }
     }
 
     public RugbyPlayer insertRugbyPlayers(PlayerCreateForm playerCreateForm) {
-        RugbyPlayer rugbyPlayer = new RugbyPlayer(playerCreateForm.getName(), playerCreateForm.getHeight(), playerCreateForm.getWeight(), playerCreateForm.getRugby_position());
+        RugbyPlayer rugbyPlayer = new RugbyPlayer(playerCreateForm.getName(), playerCreateForm.getHeight(), playerCreateForm.getWeight(), playerCreateForm.getRugbyPosition());
         String shortId = UUID.randomUUID().toString().substring(0, 8);
         rugbyPlayer.setId(shortId);
         rugbyPlayerMapper.insertPlayerData(rugbyPlayer);
         return rugbyPlayer;
     }
 
-    public void updateRugbyPlayer(String id, String name, Integer height, Integer weight, String rugby_position) {
+    public void updateRugbyPlayer(String id, String name, Integer height, Integer weight, String rugbyPosition) {
         rugbyPlayerMapper.findPlayerById(id).orElseThrow(() -> new PlayerNotFoundException("当該IDを持つ選手は存在しません"));
         if (name != null && name.trim().isEmpty()) {
             throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
         }
 
-        if (rugby_position != null && rugby_position.trim().isEmpty()) {
+        if (rugbyPosition != null && rugbyPosition.trim().isEmpty()) {
             throw new PlayerIllegalArgumentException("空白の入力は許可されていません");
         }
 
-        if (name == null && height == null && weight == null && rugby_position == null) {
+        if (name == null && height == null && weight == null && rugbyPosition == null) {
             throw new PlayerIllegalArgumentException("更新するための情報が不足しています");
         }
 
-        rugbyPlayerMapper.updateRugbyPlayer(id, name, height, weight, rugby_position);
+        rugbyPlayerMapper.updateRugbyPlayer(id, name, height, weight, rugbyPosition);
     }
 
     public void deleteRugbyPlayer(String id) {

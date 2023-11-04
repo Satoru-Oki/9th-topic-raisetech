@@ -19,12 +19,12 @@ public class RugbyPlayer {
     private Integer weight;
 
     @JsonProperty("type")
-    private String rugby_position;
+    private String rugbyPosition;
 
-    public RugbyPlayer(String name, Integer height, Integer weight, String rugby_position) {
+    public RugbyPlayer(String name, Integer height, Integer weight, String rugbyPosition) {
         this.name = name;
         this.height = height;
         this.weight = weight;
-        this.rugby_position = rugby_position;
+        this.rugbyPosition = rugbyPosition;
     }
 }

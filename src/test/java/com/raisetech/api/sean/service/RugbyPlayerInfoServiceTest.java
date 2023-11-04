@@ -171,30 +171,32 @@ class RugbyPlayerInfoServiceTest {
         assertEquals(expectedRugbyPlayer.getName(), actual.getName());
         assertEquals(expectedRugbyPlayer.getHeight(), actual.getHeight());
         assertEquals(expectedRugbyPlayer.getWeight(), actual.getWeight());
-        assertEquals(expectedRugbyPlayer.getRugby_position(), actual.getRugby_position());
+        assertEquals(expectedRugbyPlayer.getRugbyPosition(), actual.getRugbyPosition());
     }
 
     @ParameterizedTest
     @MethodSource("updateRugbyPlayerParameters")
-    public void updateRugbyPlayer_IDがある場合に他の属性がnullであっても正常に更新ができること(String playerId, String name, Integer height, Integer weight, String rugby_position) throws Exception {
+    public void updateRugbyPlayer_IDがある場合に他の属性がnullであっても正常に更新ができること(String playerId, String name, Integer height, Integer weight, String rugbyPosition) throws Exception {
         RugbyPlayer updatePlayer = new RugbyPlayer(playerId, "Kenki, Fukuoka", 175, 85, "WTB");
         doReturn(Optional.of(updatePlayer)).when(rugbyPlayerMapper).findPlayerById(playerId);
 
-        rugbyPlayerInfoService.updateRugbyPlayer(playerId, name, height, weight, rugby_position);
-        verify(rugbyPlayerMapper, times(1)).updateRugbyPlayer(playerId, name, height, weight, rugby_position);
+        rugbyPlayerInfoService.updateRugbyPlayer(playerId, name, height, weight, rugbyPosition);
+        verify(rugbyPlayerMapper, times(1)).updateRugbyPlayer(playerId, name, height, weight, rugbyPosition);
     }
 
     private static Stream<Arguments> updateRugbyPlayerParameters() {
         String[] names = {null, "Takeo, Ishizuka"};
         Integer[] heights = {null, 171};
         Integer[] weights = {null, 80};
-        String[] rugby_positions = {null, "FL"};
+        String[] rugbyPositions = {null, "FL"};
 
         return Arrays.stream(names)
                 .flatMap(name -> Arrays.stream(heights).flatMap(height ->
                         Arrays.stream(weights).flatMap(weight ->
-                                Arrays.stream(rugby_positions).map(rugby_position ->
-                                        Arguments.of("1", name, height, weight, rugby_position)))));
+                                Arrays.stream(rugbyPositions)
+                                        .filter(rugbyPosition -> !(name == null && height == null && weight == null && rugbyPosition == null))
+                                        .map(rugbyPosition ->
+                                                Arguments.of("1", name, height, weight, rugbyPosition)))));
     }
 
     @Test

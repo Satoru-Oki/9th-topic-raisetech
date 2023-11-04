@@ -48,8 +48,8 @@ class RugbyPlayerMapperTest {
     @MethodSource("provideParameters")
     @DataSet("datasets/rugbyPlayers.yml")
     @Transactional
-    void findPlayersByReference_nullを含んだ身長体重ポジションの組み合わせで検索ができること(Integer height, Integer weight, String rugby_position) {
-        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugby_position);
+    void findPlayersByReference_nullを含んだ身長体重ポジションの組み合わせで検索ができること(Integer height, Integer weight, String rugbyPosition) {
+        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugbyPosition);
 
         if (height != null) {
             players.forEach(player -> assertTrue(player.getHeight() >= height));
@@ -57,19 +57,19 @@ class RugbyPlayerMapperTest {
         if (weight != null) {
             players.forEach(player -> assertTrue(player.getWeight() >= weight));
         }
-        if (rugby_position != null) {
-            players.forEach(player -> assertEquals(rugby_position, player.getRugby_position()));
+        if (rugbyPosition != null) {
+            players.forEach(player -> assertEquals(rugbyPosition, player.getRugbyPosition()));
         }
     }
 
     static Stream<Arguments> provideParameters() {
         Integer[] heights = {null, 177};
         Integer[] weights = {null, 83};
-        String[] rugby_positions = {null, "WTB"};
+        String[] rugbyPositions = {null, "WTB"};
 
         return Arrays.stream(heights)
                 .flatMap(height -> Arrays.stream(weights)
-                        .flatMap(weight -> Arrays.stream(rugby_positions)
+                        .flatMap(weight -> Arrays.stream(rugbyPositions)
                                 .map(rugby_position -> Arguments.of(height, weight, rugby_position))
                         )
                 );
@@ -80,9 +80,9 @@ class RugbyPlayerMapperTest {
     @DataSet("datasets/rugbyPlayers.yml")
     @Transactional
     void findPlayersByReference_nullを含んだ身長体重ポジションの組み合わせで検索ができること(Integer height, Integer
-            weight, String rugby_position, List<RugbyPlayer> expectedPlayers) {
+            weight, String rugbyPosition, List<RugbyPlayer> expectedPlayers) {
 
-        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugby_position);
+        List<RugbyPlayer> players = rugbyPlayerMapper.findPlayersByReference(height, weight, rugbyPosition);
 
         assertEquals(expectedPlayers, players);
     }
