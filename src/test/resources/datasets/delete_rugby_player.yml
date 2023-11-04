@@ -1,0 +1,11 @@
+rugby_players:
+  - id: "2"
+    name: "Seiji, Hirao"
+    height: 178
+    weight: 78
+    rugby_position: "SO"
+  - id: "3"
+    name: "Gunter, Ben"
+    height: 192
+    weight: 115
+    rugby_position: "FL"

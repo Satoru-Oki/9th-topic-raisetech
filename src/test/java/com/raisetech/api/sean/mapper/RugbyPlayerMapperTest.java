@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -99,5 +100,51 @@ class RugbyPlayerMapperTest {
                 Arguments.of(192, null, "FL", List.of(new RugbyPlayer("3", "Gunter, Ben", 192, 115, "FL"))),
                 Arguments.of(null, 81, "WTB", List.of(new RugbyPlayer("1", "Kenki, Fukuoka", 175, 81, "WTB")))
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("updateRugbyPlayerRealParameters")
+    @DataSet("datasets/insert_insertPlayerData.yml")
+    @Transactional
+    public void updateRugbyPlayer_身長体重ポジションすべての組み合わせで更新ができること(String id, String name, Integer height, Integer weight, String rugbyPosition, RugbyPlayer expectedPlayer) {
+
+        rugbyPlayerMapper.updateRugbyPlayer(id, name, height, weight, rugbyPosition);
+
+        Optional<RugbyPlayer> playerOptional = rugbyPlayerMapper.findPlayerById(id);
+        assertTrue(playerOptional.isPresent(), "当該IDを持つ選手は存在しません");
+        RugbyPlayer updatedPlayer = playerOptional.get();
+
+        assertEquals(expectedPlayer.getName(), updatedPlayer.getName());
+        assertEquals(expectedPlayer.getHeight(), updatedPlayer.getHeight());
+        assertEquals(expectedPlayer.getWeight(), updatedPlayer.getWeight());
+        assertEquals(expectedPlayer.getRugbyPosition(), updatedPlayer.getRugbyPosition());
+    }
+
+    private static Stream<Arguments> updateRugbyPlayerRealParameters() {
+        return Stream.of(
+                Arguments.of("1", "Takeo, Ishizuka", null, null, null, new RugbyPlayer("1", "Takeo, Ishizuka", 175, 81, "WTB")),
+                Arguments.of("1", null, 172, null, null, new RugbyPlayer("1", "Kenki, Fukuoka", 172, 81, "WTB")),
+                Arguments.of("1", null, null, 83, null, new RugbyPlayer("1", "Kenki, Fukuoka", 175, 83, "WTB")),
+                Arguments.of("1", null, null, null, "FL", new RugbyPlayer("1", "Kenki, Fukuoka", 175, 81, "FL")),
+                Arguments.of("1", "Takeo, Ishizuka", 172, null, null, new RugbyPlayer("1", "Takeo, Ishizuka", 172, 81, "WTB")),
+                Arguments.of("1", "Takeo, Ishizuka", null, 83, null, new RugbyPlayer("1", "Takeo, Ishizuka", 175, 83, "WTB")),
+                Arguments.of("1", "Takeo, Ishizuka", null, null, "FL", new RugbyPlayer("1", "Takeo, Ishizuka", 175, 81, "FL")),
+                Arguments.of("1", null, 172, 83, null, new RugbyPlayer("1", "Kenki, Fukuoka", 172, 83, "WTB")),
+                Arguments.of("1", null, 172, null, "FL", new RugbyPlayer("1", "Kenki, Fukuoka", 172, 81, "FL")),
+                Arguments.of("1", null, null, 83, "FL", new RugbyPlayer("1", "Kenki, Fukuoka", 175, 83, "FL")),
+                Arguments.of("1", "Takeo, Ishizuka", 172, 83, null, new RugbyPlayer("1", "Takeo, Ishizuka", 172, 83, "WTB")),
+                Arguments.of("1", "Takeo, Ishizuka", null, 83, "FL", new RugbyPlayer("1", "Takeo, Ishizuka", 175, 83, "FL")),
+                Arguments.of("1", null, 172, 83, "FL", new RugbyPlayer("1", "Kenki, Fukuoka", 172, 83, "FL")),
+                Arguments.of("1", "Takeo, Ishizuka", 172, null, "FL", new RugbyPlayer("1", "Takeo, Ishizuka", 172, 81, "FL")),
+                Arguments.of("1", "Takeo, Ishizuka", 172, 83, "FL", new RugbyPlayer("1", "Takeo, Ishizuka", 172, 83, "FL"))
+        );
+    }
+
+    @Test
+    @DataSet(value = "datasets/rugbyPlayers.yml")
+    @ExpectedDataSet(value = "datasets/delete_rugby_player.yml")
+    @Transactional
+    void 指定したIDの選手データが消去できること() {
+        rugbyPlayerMapper.deleteRugbyPlayer("1");
     }
 }
